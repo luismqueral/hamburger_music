@@ -2,6 +2,10 @@ POEM_LENGTH=10
 KEY="AIzaSyCHglmxmC_NSLeFdLwXUgiox2RveFbSms0"
 MINSUBLENGTH=3
 MAX_LINES_PER_VIDEO=2
+SAVE_TO_FILE=True  #Set to False to output to stdout
+POEM_BASENAME="Poem-"
+POEM_EXTENSION=".txt"
+POEM_DIRECTORY="/path/to/dropbox/subdir"
 ####################################################
 import json
 from urllib import urlopen
@@ -10,6 +14,8 @@ from collections import namedtuple
 import random
 import xml.etree.ElementTree as ET
 from HTMLParser import HTMLParser
+from datetime import datetime
+from os import path
 
 
 class NoSuitableText(Exception):
@@ -85,4 +91,10 @@ class Poet(object):
         return poem
     
 p=Poet(KEY,lines_per_video=MAX_LINES_PER_VIDEO)
-print HTMLParser().unescape(p.makePoem(POEM_LENGTH))
+
+if SAVE_TO_FILE:
+    filename=path.join(POEM_DIRECTORY,POEM_BASENAME+datetime.now().isoformat()[:-7].replace(':','.')+POEM_EXTENSION)
+    with open(filename,'w') as f:
+        f.write(HTMLParser().unescape(p.makePoem(POEM_LENGTH)))
+else:
+    print HTMLParser().unescape(p.makePoem(POEM_LENGTH))
