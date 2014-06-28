@@ -9,6 +9,7 @@ from string import ascii_lowercase
 from collections import namedtuple
 import random
 import xml.etree.ElementTree as ET
+from HTMLParser import HTMLParser
 
 
 class NoSuitableText(Exception):
@@ -84,4 +85,4 @@ class Poet(object):
         return poem
     
 p=Poet(KEY,lines_per_video=MAX_LINES_PER_VIDEO)
-print unicode(p.makePoem(POEM_LENGTH),"utf-8")
+print HTMLParser().unescape(p.makePoem(POEM_LENGTH))
