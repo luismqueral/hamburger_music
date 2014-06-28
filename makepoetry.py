@@ -5,12 +5,12 @@ MAX_LINES_PER_VIDEO=2
 SAVE_TO_FILE=True  #Set to False to output to stdout
 POEM_BASENAME="Poem-"
 POEM_EXTENSION=".txt"
-POEM_DIRECTORY="/path/to/dropbox/subdir"
+POEM_DIRECTORY="/path/to/dropbox/subdirectory"
+NUMBER_OF_POEMS=1 #Use this to make large amounts of poems
 ####################################################
 import json
 from urllib import urlopen
 from string import ascii_lowercase
-from collections import namedtuple
 import random
 import xml.etree.ElementTree as ET
 from HTMLParser import HTMLParser
@@ -92,9 +92,10 @@ class Poet(object):
     
 p=Poet(KEY,lines_per_video=MAX_LINES_PER_VIDEO)
 
-if SAVE_TO_FILE:
-    filename=path.join(POEM_DIRECTORY,POEM_BASENAME+datetime.now().isoformat()[:-7].replace(':','.')+POEM_EXTENSION)
-    with open(filename,'w') as f:
-        f.write(HTMLParser().unescape(p.makePoem(POEM_LENGTH)))
-else:
-    print HTMLParser().unescape(p.makePoem(POEM_LENGTH))
+for i in range(NUMBER_OF_POEMS):
+    if SAVE_TO_FILE:
+        filename=path.join(POEM_DIRECTORY,POEM_BASENAME+datetime.now().isoformat()[:-7].replace(':','.')+POEM_EXTENSION)
+        with open(filename,'w') as f:
+            f.write(HTMLParser().unescape(p.makePoem(POEM_LENGTH)))
+    else:
+        print HTMLParser().unescape(p.makePoem(POEM_LENGTH))
