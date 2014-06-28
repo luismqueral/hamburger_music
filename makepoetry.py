@@ -1,12 +1,12 @@
 POEM_LENGTH=6
 KEY="AIzaSyCHglmxmC_NSLeFdLwXUgiox2RveFbSms0"
 MINSUBLENGTH=3
-MAX_LINES_PER_VIDEO=2
-SAVE_TO_FILE=True  #Set to False to output to stdout
+MAX_LINES_PER_VIDEO=3
+SAVE_TO_FILE=False  #Set to False to output to stdout
 POEM_BASENAME="Poem-"
 POEM_EXTENSION=".txt"
 POEM_DIRECTORY="/Users/luis/Dropbox/Public/poems"
-NUMBER_OF_POEMS=10 #Use this to make large amounts of poems
+NUMBER_OF_POEMS=1 #Use this to make large amounts of poems
 ####################################################
 import json
 from urllib import urlopen
