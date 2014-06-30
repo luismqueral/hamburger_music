@@ -126,7 +126,7 @@ class Poet(object):
 
         
 def strip_html(text):
-    re.sub('<[^<]+?>', '', text)
+    return re.sub('<[^<]+?>', '', text)
 
 p=Poet(YOUTUBE_KEY,WORDRANGE,CAPITALIZE,lines_per_video=MAX_LINES_PER_VIDEO)
 
