@@ -6,10 +6,10 @@
 from os import path
 #######################################
 
-BLOGNAME='blog' #If your tumblr is foobar.tumblr.com, your blogname is "foobar" 
+BLOGNAME='hamburgermusic' #If your tumblr is foobar.tumblr.com, your blogname is "foobar" 
 OAUTHFILE=path.join(path.expanduser('~'),'.tumblr.oauth') #Comment this out and uncomment the next line to specify a path other than your homedir
 #ACCESS_TOKEN_STORAGE_FILE='/path/to/file.oauth'
-POEM_PATH='/dir/to/watch/for/new/files'
+POEM_PATH='luis/Dropbox/Public/poems'
 
 ###########################################
 CONSUMER_KEY='gcXNyTsZCHfH1ROf519M3jwHfAbSWNMawSV7PW1FrKCm6KtIJj'
