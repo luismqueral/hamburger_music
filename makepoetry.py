@@ -1,7 +1,7 @@
 from os import path
 ####################################################
 
-POEM_LENGTH=100
+POEM_LENGTH=10
 
 MINSUBLENGTH=3 #Minimum length in characters for a caption
 MAX_LINES_PER_VIDEO=2 #Setting this to a higher number gives higher performance, but more lines from the same video
@@ -22,6 +22,7 @@ import xml.etree.ElementTree as ET
 from HTMLParser import HTMLParser
 from datetime import datetime
 from lxml import html
+from string import ascii_letters
 
 class NoSuitableText(Exception):
     pass
@@ -45,6 +46,12 @@ class Poet(object):
     @staticmethod
     def isnothing(item):
         return item in Poet.nothing or len(item)<MINSUBLENGTH
+    
+    @staticmethod
+    def stripbeginnonletters(text):
+        while not (text[0] in ascii_letters):
+            text=text[1:]
+        return text
     
     def __init__(self,key,randomness=2,languages=['en'],lines_per_video=2):
         self.key=key
@@ -77,7 +84,7 @@ class Poet(object):
             tree=ET.fromstring(results)
         except ET.ParseError:
             raise NoSuitableText
-        alllines=[line.text.replace('\n','') for line in tree.findall('text') if not Poet.isnothing(line.text) and only_roman_chars(unicode(line.text))]
+        alllines=[Poet.stripbeginnonletters(line.text.replace('\n','')) for line in tree.findall('text') if not Poet.isnothing(line.text) and only_roman_chars(unicode(line.text))]
         if len(alllines)==0:
             raise NoSuitableText
         elif len(alllines)<self.lines_per_video:
