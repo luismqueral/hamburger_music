@@ -5,7 +5,7 @@ POEM_LENGTH=10
 
 MINSUBLENGTH=3 #Minimum length in characters for a caption
 MAX_LINES_PER_VIDEO=2 #Setting this to a higher number gives higher performance, but more lines from the same video
-SAVE_TO_FILE=False  #Set to False to output to stdout
+SAVE_TO_FILE=True  #Set to False to output to stdout
 POEM_BASENAME="Poem-" #The current date and time get added to POEM_BASENAME, so for example Poem-2014-06-30T12.51.txt
 POEM_EXTENSION=".txt"
 POEM_PATH="/home/elon/poems"
@@ -13,6 +13,7 @@ NUMBER_OF_POEMS=1 #Use this to make large amounts of poems
 WORDRANGE=xrange(1,20) #Anywhere from 1 to 20 words.
 #WORDRANGE=[1,3,7,8] #Only lines with either 1,3,7, or 8 words are accepted
 #WORDRANGE=[6] #Only lines with 6 words are accepted
+CAPITALIZE=True
 
 #######################################################
 YOUTUBE_KEY="AIzaSyCHglmxmC_NSLeFdLwXUgiox2RveFbSms0"
@@ -24,8 +25,8 @@ import random
 import xml.etree.ElementTree as ET
 from HTMLParser import HTMLParser
 from datetime import datetime
-from lxml import html
 from string import ascii_letters
+import re
 
 class NoSuitableText(Exception):
     pass
@@ -44,6 +45,9 @@ def only_roman_chars(unistr):
            if uchr.isalpha())
 ################################################################################################################
 
+def capitalize(text):
+    return text[0].upper()+text[1:]
+
 class Poet(object):
     nothing=[None,'',' ']
     @staticmethod
@@ -56,9 +60,10 @@ class Poet(object):
             text=text[1:]
         return text
     
-    def __init__(self,key,wordrange,randomness=3,languages=['en'],lines_per_video=2):
+    def __init__(self,key,wordrange,capitalize,randomness=2,languages=['en'],lines_per_video=2):
         self.key=key
         self.wordrange=wordrange
+        self.capitalize=capitalize
         self.randomness=randomness
         self.languages=languages
         self.lines_per_video=lines_per_video
@@ -88,7 +93,7 @@ class Poet(object):
             tree=ET.fromstring(results)
         except ET.ParseError:
             raise NoSuitableText
-        alllines=[Poet.stripbeginnonletters(line.text.replace('\n','')) for line in tree.findall('text') if not Poet.isnothing(line.text) and only_roman_chars(unicode(line.text)) and len(line.text.split()) in self.wordrange]
+        alllines=[capitalize(HTMLParser().unescape(Poet.stripbeginnonletters(line.text.replace('\n','')))) for line in tree.findall('text') if not Poet.isnothing(line.text) and only_roman_chars(unicode(line.text)) and len(line.text.split()) in self.wordrange]
         if len(alllines)==0:
             raise NoSuitableText
         elif len(alllines)<self.lines_per_video:
@@ -121,12 +126,12 @@ class Poet(object):
 
         
 def strip_html(text):
-    return html.document_fromstring(text).text_content()
+    re.sub('<[^<]+?>', '', text)
 
-p=Poet(YOUTUBE_KEY,WORDRANGE,lines_per_video=MAX_LINES_PER_VIDEO)
+p=Poet(YOUTUBE_KEY,WORDRANGE,CAPITALIZE,lines_per_video=MAX_LINES_PER_VIDEO)
 
 for i in range(NUMBER_OF_POEMS):
-    poem=strip_html(HTMLParser().unescape(p.makePoem(POEM_LENGTH))).encode('utf-8')
+    poem=strip_html(p.makePoem(POEM_LENGTH)).encode('utf-8')
     if SAVE_TO_FILE:
         filename=path.join(POEM_PATH,POEM_BASENAME+datetime.now().isoformat()[:-7].replace(':','.')+POEM_EXTENSION)
         with open(filename,'w') as f:
