@@ -4,13 +4,16 @@
 
 
 from os import path
+from datetime import timedelta
 #######################################
 
-BLOGNAME='hamburgermusic' #If your tumblr is foobar.tumblr.com, your blogname is "foobar" 
+BLOGNAME='analyst-thorn' #If your tumblr is foobar.tumblr.com, your blogname is "foobar" 
 OAUTHFILE=path.join(path.expanduser('~'),'.tumblr.oauth') #Comment this out and uncomment the next line to specify a path other than your homedir
 #ACCESS_TOKEN_STORAGE_FILE='/path/to/file.oauth'
 POEM_PATH='luis/Dropbox/Public/poems'
-
+USETIMEDELTA=True
+TIMEDELTA=timedelta(minutes=2) #For this to work, the timezone of your Tumblr-account needs to be set correctly, and your system time should be accurate
+#TIMEDELTA=timedelta(hours=1,minutes=2,seconds=10) #You get the idea...
 ###########################################
 CONSUMER_KEY='gcXNyTsZCHfH1ROf519M3jwHfAbSWNMawSV7PW1FrKCm6KtIJj'
 CONSUMER_SECRET='j7akedGujJcKoIEymKbZJb8WYkM4pmX9t1u3imnRIaYxcFP06s'
@@ -29,23 +32,27 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from sys import exit
 import signal
+from datetime import datetime
 
 
 class NewPoemHandler(FileSystemEventHandler):
-    def __init__(self,tumblr):
+    def __init__(self,tumblr,timedelta):
         self.tumblr=tumblr
-        
+        self.lastupload=None
+        self.timedelta=timedelta
+        self.usetimedelta=USETIMEDELTA
     def on_created(self,event):
         if not event.is_directory:
-            with open(event.src_path) as f:
-                self.tumblr.post(f.read())
-    
-    def on_moved(self,event):
-        self.on_created(event)
-    
-    def on_modified(self,event):
-        self.on_created(event)
-
+            if self.usetimedelta:
+                if self.lastupload==None:
+                    self.lastupload=datetime.now()
+                else:
+                    self.lastupload=self.lastupload+self.timedelta
+                with open(event.src_path) as f:
+                    self.tumblr.post(f.read(),publishdate=self.lastupload.isoformat()[:-7])
+            else:
+                with open(event.src_path) as f:
+                    self.tumblr.post(f.read())
 
 class Tumblr(object):
     requesturl=TUMBLR_REQUEST_TOKEN_URL
@@ -93,11 +100,14 @@ class Tumblr(object):
         oauth_verifier=re.findall('oauth_verifier=(.*)#_=_',url)[0]
         return tumblr.get_access_token(request_token, request_token_secret, params={'oauth_verifier':oauth_verifier})
     
-    def post(self,body,title=''):
-        self.tumblr.create_text(self.blogname,title=title,body=body)
+    def post(self,body,title='',publishdate=None):
+        if publishdate is None:
+            self.tumblr.create_text(self.blogname,title=title,body=body)
+        else:
+            self.tumblr.create_text(self.blogname,title=title,body=body,state="queue",publish_on=publishdate)
       
 tumblr=Tumblr(CONSUMER_KEY,CONSUMER_SECRET,BLOGNAME,OAUTHFILE)  
-handler=NewPoemHandler(tumblr)
+handler=NewPoemHandler(tumblr,TIMEDELTA)
 observer=Observer()
 observer.schedule(handler, POEM_PATH)
 print 'Starting observing for file changes in {0} now'.format(POEM_PATH)
