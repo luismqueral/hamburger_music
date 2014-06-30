@@ -21,7 +21,7 @@ import random
 import xml.etree.ElementTree as ET
 from HTMLParser import HTMLParser
 from datetime import datetime
-
+from lxml import html
 
 class NoSuitableText(Exception):
     pass
@@ -96,13 +96,16 @@ class Poet(object):
         return poem
 
         
-        
+def strip_html(text):
+    return html.document_fromstring(text).text_content()
+
 p=Poet(YOUTUBE_KEY,lines_per_video=MAX_LINES_PER_VIDEO)
 
 for i in range(NUMBER_OF_POEMS):
+    poem=strip_html(HTMLParser().unescape(p.makePoem(POEM_LENGTH))).encode('utf-8')
     if SAVE_TO_FILE:
         filename=path.join(POEM_PATH,POEM_BASENAME+datetime.now().isoformat()[:-7].replace(':','.')+POEM_EXTENSION)
         with open(filename,'w') as f:
-            f.write(HTMLParser().unescape(p.makePoem(POEM_LENGTH)).encode('utf-8'))
+            f.write(poem)
     else:
-        print HTMLParser().unescape(p.makePoem(POEM_LENGTH)).encode('utf-8')
+        print poem
