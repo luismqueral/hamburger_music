@@ -49,7 +49,7 @@ class Poet(object):
     
     @staticmethod
     def stripbeginnonletters(text):
-        while not (text[0] in ascii_letters):
+        while not (text[0] in ascii_letters) and len(text)>1:
             text=text[1:]
         return text
     
@@ -118,11 +118,6 @@ class Poet(object):
         
 def strip_html(text):
     return html.document_fromstring(text).text_content()
-
-
-
-
-
 
 p=Poet(YOUTUBE_KEY,lines_per_video=MAX_LINES_PER_VIDEO)
 
