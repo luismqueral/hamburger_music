@@ -4,13 +4,12 @@
 
 
 from os import path
-from datetime import timedelta
 #######################################
 
-BLOGNAME='analyst-thorn' #If your tumblr is foobar.tumblr.com, your blogname is "foobar" 
+BLOGNAME='hamburgermusic' #If your tumblr is foobar.tumblr.com, your blogname is "foobar" 
 OAUTHFILE=path.join(path.expanduser('~'),'.tumblr.oauth') #Comment this out and uncomment the next line to specify a path other than your homedir
 #ACCESS_TOKEN_STORAGE_FILE='/path/to/file.oauth'
-POEM_PATH='luis/Dropbox/Public/poems'
+POEM_PATH='/Users/luis/Dropbox/Public/poems'
 USETIMEDELTA=True
 TIMEDELTA=timedelta(minutes=2) #For this to work, the timezone of your Tumblr-account needs to be set correctly, and your system time should be accurate
 #TIMEDELTA=timedelta(hours=1,minutes=2,seconds=10) #You get the idea...
