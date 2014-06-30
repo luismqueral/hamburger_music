@@ -52,7 +52,3 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
-
-makepoetry.py
-
-uploadtotumblr.py
