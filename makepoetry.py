@@ -1,11 +1,11 @@
 from os import path
 ####################################################
 
-POEM_LENGTH=10
+POEM_LENGTH=100
 
 MINSUBLENGTH=3 #Minimum length in characters for a caption
 MAX_LINES_PER_VIDEO=2 #Setting this to a higher number gives higher performance, but more lines from the same video
-SAVE_TO_FILE=True  #Set to False to output to stdout
+SAVE_TO_FILE=False  #Set to False to output to stdout
 POEM_BASENAME="Poem-" #The current date and time get added to POEM_BASENAME, so for example Poem-2014-06-30T12.51.txt
 POEM_EXTENSION=".txt"
 POEM_PATH="/home/elon/poems"
@@ -26,6 +26,19 @@ from lxml import html
 class NoSuitableText(Exception):
     pass
 
+#####################Original author: tzot, in a response at StackOverflow######################################
+import unicodedata as ud
+latin_letters= {}
+def is_latin(uchr):
+    try: return latin_letters[uchr]
+    except KeyError:
+        return latin_letters.setdefault(uchr, 'LATIN' in ud.name(uchr))
+
+def only_roman_chars(unistr):
+    return all(is_latin(uchr)
+           for uchr in unistr
+           if uchr.isalpha())
+################################################################################################################
 
 class Poet(object):
     nothing=[None,'',' ']
@@ -64,7 +77,7 @@ class Poet(object):
             tree=ET.fromstring(results)
         except ET.ParseError:
             raise NoSuitableText
-        alllines=[line.text.replace('\n','') for line in tree.findall('text') if not Poet.isnothing(line.text)]
+        alllines=[line.text.replace('\n','') for line in tree.findall('text') if not Poet.isnothing(line.text) and only_roman_chars(unicode(line.text))]
         if len(alllines)==0:
             raise NoSuitableText
         elif len(alllines)<self.lines_per_video:
@@ -98,6 +111,11 @@ class Poet(object):
         
 def strip_html(text):
     return html.document_fromstring(text).text_content()
+
+
+
+
+
 
 p=Poet(YOUTUBE_KEY,lines_per_video=MAX_LINES_PER_VIDEO)
 
