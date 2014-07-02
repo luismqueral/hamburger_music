@@ -43,6 +43,7 @@ class NewPoemHandler(FileSystemEventHandler):
         self.usetimedelta=USETIMEDELTA
     def on_created(self,event):
         if not event.is_directory:
+            print self.lastupload
             if self.usetimedelta:
                 if self.lastupload==None:
                     self.lastupload=datetime.now()
