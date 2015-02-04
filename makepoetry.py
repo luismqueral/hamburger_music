@@ -43,7 +43,7 @@ WORDRANGE=[1,2,3,5,7] #Only lines with either 1,3,7, or 8 words are accepted
 CAPITALIZE=True
 
 #######################################################
-YOUTUBE_KEY="AIzaSyCHglmxmC_NSLeFdLwXUgiox2RveFbSms0"
+YOUTUBE_KEY="###"
 #######################################################
 import json
 from urllib import urlopen
