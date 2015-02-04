@@ -41,7 +41,7 @@ WORDRANGE=xrange(3,6) #Anywhere from 1 to 7 words.
 CAPITALIZE=True
 
 #######################################################
-YOUTUBE_KEY="AIzaSyCHglmxmC_NSLeFdLwXUgiox2RveFbSms0"
+YOUTUBE_KEY="###"
 #######################################################
 import json
 from urllib import urlopen
