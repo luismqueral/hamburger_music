@@ -27,9 +27,9 @@
 ####################################################
 
 try:
-	from settings import *
+    from settings import *
 except ImportError:
-	print "Error, no settings-file found. Create a settings.py file, or edit and rename samplesettings.py to settings.py"
+    print "Error, no settings-file found. Create a settings.py file, or edit and rename samplesettings.py to settings.py"
 
 from os import path
 import json
@@ -73,11 +73,13 @@ class Poet(object):
         while not (text[0] in ascii_letters) and len(text)>1:
             text=text[1:]
         return text
-    
-    def __init__(self,key,wordrange,capitalize,randomness=2,languages=['en'],lines_per_video=2):
+
+    def __init__(self,key,wordrange,capitalize,whitelist,blacklist,randomness=2,languages=['en'],lines_per_video=2):
         self.key=key
         self.wordrange=wordrange
         self.capitalize=capitalize
+        self.whitelist=whitelist
+        self.blacklist=blacklist
         self.randomness=randomness
         self.languages=languages
         self.lines_per_video=lines_per_video
@@ -108,6 +110,8 @@ class Poet(object):
         except ET.ParseError:
             raise NoSuitableText
         alllines=[capitalize(HTMLParser().unescape(Poet.stripbeginnonletters(line.text.replace('\n','')))) for line in tree.findall('text') if not Poet.isnothing(line.text) and only_roman_chars(unicode(line.text)) and len(line.text.split()) in self.wordrange]
+        alllines=self.filterBlacklist(self.filterWhitelist(alllines))
+        
         if len(alllines)==0:
             raise NoSuitableText
         elif len(alllines)<self.lines_per_video:
@@ -131,7 +135,12 @@ class Poet(object):
                 linecache.extend(lines[1:])
                 yield lines[0]
         
+    def filterWhitelist(self, lines):
+        return [line for line in lines if not self.whitelist or any([line.__contains__(whitelistentry) for whitelistentry in self.whitelist])]
     
+    def filterBlacklist(self, lines):
+        return [line for line in lines if not any([line.__contains__(blacklistentry) for blacklistentry in self.blacklist])]
+        
     def makePoem(self,number_of_lines):
         poemlist=[self.genLine.next() for i in xrange(number_of_lines)]
         random.shuffle(poemlist)
@@ -142,7 +151,17 @@ class Poet(object):
 def strip_html(text):
     return re.sub('<[^<]+?>', '', text)
 
-p=Poet(YOUTUBE_KEY,WORDRANGE,CAPITALIZE,lines_per_video=MAX_LINES_PER_VIDEO)
+try:
+	WHITELIST
+except NameError:
+	WHITELIST=[]
+
+try:
+	BLACKLIST
+except NameError:
+	BLACKLIST=[]
+		
+p=Poet(YOUTUBE_KEY,WORDRANGE,CAPITALIZE, WHITELIST, BLACKLIST, lines_per_video=MAX_LINES_PER_VIDEO)
 
 for i in range(NUMBER_OF_POEMS):
     poem=strip_html(p.makePoem(POEM_LENGTH)).encode('utf-8')

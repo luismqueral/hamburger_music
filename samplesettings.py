@@ -17,3 +17,24 @@ CAPITALIZE=True
 #######################################################
 YOUTUBE_KEY="####"
 #######################################################
+
+
+#################  Filter #############################
+
+# Leave empty, comment, or remove to disable whitelist
+WHITELIST=[
+'awesome',
+'I\'m hungry',
+'driveway'
+]
+#WHITELIST=open('/path/to/whitelist.txt').read().splitlines()     # Uncomment to read newline-separated whitelist-entries from file
+
+# Leave empty, comment, or remove line to disable blacklist
+BLACKLIST=[
+'New York',
+'Los Angeles',
+'don\'t mess with me'
+]
+#BLACKLIST=open('/path/to/blacklist.txt').read().splitlines()     # Uncomment to read newline-separated blacklist-entries from file
+
+
