@@ -1,3 +1,5 @@
+####################  Githubs own Python-gitignore ####################
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -52,3 +54,6 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+######################  Youtube Poetry custom gitignore ###############
+
+settings.py
