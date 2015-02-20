@@ -12,7 +12,7 @@ OAUTHFILE=path.join(path.expanduser('~'),'.tumblr.oauth') #Comment this out and 
 #ACCESS_TOKEN_STORAGE_FILE='/path/to/file.oauth'
 POEM_PATH='/Users/luis/Dropbox/Public/poems'
 USETIMEDELTA=True
-TIMEDELTA=timedelta(minutes=2) #For this to work, the timezone of your Tumblr-account needs to be set correctly, and your system time should be accurate
+TIMEDELTA=timedelta(minutes=15) #For this to work, the timezone of your Tumblr-account needs to be set correctly, and your system time should be accurate
 #TIMEDELTA=timedelta(hours=1,minutes=2,seconds=10) #You get the idea...
 ###########################################
 CONSUMER_KEY='gcXNyTsZCHfH1ROf519M3jwHfAbSWNMawSV7PW1FrKCm6KtIJj'
@@ -43,6 +43,7 @@ class NewPoemHandler(FileSystemEventHandler):
         self.usetimedelta=USETIMEDELTA
     def on_created(self,event):
         if not event.is_directory:
+            print self.lastupload
             if self.usetimedelta:
                 if self.lastupload==None:
                     self.lastupload=datetime.now()
