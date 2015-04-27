@@ -15,8 +15,8 @@ USETIMEDELTA=True
 TIMEDELTA=timedelta(minutes=30) #For this to work, the timezone of your Tumblr-account needs to be set correctly, and your system time should be accurate
 #TIMEDELTA=timedelta(hours=1,minutes=2,seconds=10) #You get the idea...
 ###########################################
-CONSUMER_KEY='gcXNyTsZCHfH1ROf519M3jwHfAbSWNMawSV7PW1FrKCm6KtIJj'
-CONSUMER_SECRET='j7akedGujJcKoIEymKbZJb8WYkM4pmX9t1u3imnRIaYxcFP06s'
+CONSUMER_KEY='xxx' #enter secret here
+CONSUMER_SECRET='xxx' #enter secret here
 
 TUMBLR_REQUEST_TOKEN_URL="http://www.tumblr.com/oauth/request_token"
 TUMBLR_AUTHORIZE_URL="http://www.tumblr.com/oauth/authorize"
