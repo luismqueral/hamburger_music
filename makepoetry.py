@@ -166,9 +166,4 @@ p=Poet(YOUTUBE_KEY,WORDRANGE,CAPITALIZE, WHITELIST, BLACKLIST, lines_per_video=M
 
 for i in range(NUMBER_OF_POEMS):
     poem=strip_html(p.makePoem(POEM_LENGTH)).encode('utf-8')
-    if SAVE_TO_FILE:
-        filename=path.join(POEM_PATH,POEM_BASENAME+datetime.now().isoformat()[:-7].replace(':','.')+POEM_EXTENSION)
-        with open(filename,'w') as f:
-            f.write(poem)
-    else:
-        print poem
+    OUTPUTHANDLER(poem, OUTPUTHANDLERSETTINGS)
