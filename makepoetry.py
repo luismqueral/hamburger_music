@@ -26,19 +26,20 @@
 
 ####################################################
 
+from sys import exit
+
 try:
     from settings import *
 except ImportError:
-    print "Error, no settings-file found. Create a settings.py file, or edit and rename samplesettings.py to settings.py"
+    exit("Error, no settings-file found. Create a settings.py file, or edit and rename samplesettings.py to settings.py")
+    
 
-from os import path
 import json
 from urllib import urlopen
 from string import ascii_lowercase
 import random
 import xml.etree.ElementTree as ET
 from HTMLParser import HTMLParser
-from datetime import datetime
 from string import ascii_letters
 import re
 
