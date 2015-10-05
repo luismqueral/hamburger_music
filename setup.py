@@ -4,7 +4,7 @@ setup(
     name='HamburgerMusic',
     version='3.0.0',
     packages=['hamburger_music'],
-    scripts=['bin/makepoetry.py'],
+    scripts=['scripts/makepoetry.py'],
     url="http://luisquer.al/hamburger-music",
     long_description=open('README.md').read(),
     install_requires=[
