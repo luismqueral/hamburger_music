@@ -16,7 +16,7 @@ CAPITALIZE = True
 
 YOUTUBE_KEY = "####"
 #################  Output handler #####################
-import outputhandlers
+from hamburger_music import outputhandlers
 
 # Once a poem is created, it is sent to the outputhandlers. Outputhandlers are 'independent' pieces of code that take as input a single string (the poem), and then send/post/output that string to for example a website or a file
 # Most outputhandlers will need certain settings to be set. outputhandlers.write_to_file needs to know where to store the poems and what to call them, outputhandlers.post_to_tumblr needs Tumblr authentication keys for your account, etc
