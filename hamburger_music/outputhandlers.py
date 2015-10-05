@@ -1,3 +1,5 @@
+from . import handlers.post_to_tumblr
+
 def print_to_terminal(poem, settings):
     print(poem)
     print()
@@ -16,7 +18,6 @@ def write_to_file(poem, settings):
 
 
 def post_to_tumblr(poem, settings):
-    import handlers.post_to_tumblr
 
     t = handlers.post_to_tumblr.Tumblr(settings['CONSUMER_KEY'], settings['CONSUMER_SECRET'], settings['BLOGNAME'],
                                        settings['OAUTHFILE'])
